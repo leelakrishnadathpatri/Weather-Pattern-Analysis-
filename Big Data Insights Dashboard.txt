@@ -1,0 +1,115 @@
+#include <stdio.h>
+
+#define MAX 1000
+
+int main()
+{
+    int data[MAX];
+    int n, i;
+    int sum = 0;
+    int min, max;
+    int positive = 0, negative = 0, zero = 0;
+    double average;
+
+    printf("============================================\n");
+    printf("        BIG DATA INSIGHTS DASHBOARD\n");
+    printf("============================================\n");
+
+    printf("Enter number of data records (1-%d): ", MAX);
+
+    if (scanf("%d", &n) != 1 || n < 1 || n > MAX)
+    {
+        printf("Invalid number of records!\n");
+        return 1;
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        printf("Enter value for record %d: ", i + 1);
+
+        if (scanf("%d", &data[i]) != 1)
+        {
+            printf("Invalid input!\n");
+            return 1;
+        }
+
+        sum += data[i];
+
+        if (i == 0)
+        {
+            min = data[i];
+            max = data[i];
+        }
+
+        if (data[i] < min)
+            min = data[i];
+
+        if (data[i] > max)
+            max = data[i];
+
+        if (data[i] > 0)
+            positive++;
+        else if (data[i] < 0)
+            negative++;
+        else
+            zero++;
+    }
+
+    average = (double)sum / n;
+
+    printf("\n");
+    printf("+------------------------------------------+\n");
+    printf("|          BIG DATA INSIGHTS               |\n");
+    printf("+------------------------------------------+\n");
+
+    printf("| Total Records       : %-19d |\n", n);
+    printf("| Total Sum           : %-19d |\n", sum);
+    printf("| Average Value       : %-19.2f |\n", average);
+    printf("| Minimum Value       : %-19d |\n", min);
+    printf("| Maximum Value       : %-19d |\n", max);
+    printf("| Positive Records    : %-19d |\n", positive);
+    printf("| Negative Records    : %-19d |\n", negative);
+    printf("| Zero Records        : %-19d |\n", zero);
+
+    printf("+------------------------------------------+\n");
+
+    printf("\nDATA DISTRIBUTION\n");
+    printf("--------------------------------------------\n");
+    printf("Positive : ");
+
+    for (i = 0; i < positive; i++)
+        printf("*");
+
+    printf(" (%d)\n", positive);
+
+    printf("Negative : ");
+
+    for (i = 0; i < negative; i++)
+        printf("*");
+
+    printf(" (%d)\n", negative);
+
+    printf("Zero     : ");
+
+    for (i = 0; i < zero; i++)
+        printf("*");
+
+    printf(" (%d)\n", zero);
+
+    printf("--------------------------------------------\n");
+
+    if (average > 0)
+        printf("Insight: Dataset has a positive average.\n");
+    else if (average < 0)
+        printf("Insight: Dataset has a negative average.\n");
+    else
+        printf("Insight: Dataset average is zero.\n");
+
+    if (max == min)
+        printf("Insight: All records have the same value.\n");
+
+    printf("\nDashboard analysis completed.\n");
+
+    return 0;
+}
+2. Sample 

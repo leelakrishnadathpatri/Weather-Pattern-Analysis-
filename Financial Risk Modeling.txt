@@ -1,0 +1,121 @@
+
+#include <stdio.h>
+#include <math.h>
+
+#define MAX 100
+
+int main()
+{
+    int n, i;
+    double investment, returns[MAX];
+    double sum = 0.0, mean, variance = 0.0;
+    double stdDev, expectedProfit, finalValue;
+    double riskPercent, sharpeRatio;
+    double riskFreeRate;
+
+    printf("========================================\n");
+    printf("       FINANCIAL RISK MODELING\n");
+    printf("========================================\n");
+
+    printf("Enter initial investment amount: ");
+    if (scanf("%lf", &investment) != 1 || investment <= 0)
+    {
+        printf("Invalid investment amount!\n");
+        return 1;
+    }
+
+    printf("Enter number of return observations (1-%d): ", MAX);
+    if (scanf("%d", &n) != 1 || n < 1 || n > MAX)
+    {
+        printf("Invalid number of observations!\n");
+        return 1;
+    }
+
+    printf("\nEnter returns as percentages.\n");
+    printf("Example: 5 for 5%% gain, -3 for 3%% loss.\n");
+
+    for (i = 0; i < n; i++)
+    {
+        printf("Return %d (%%): ", i + 1);
+
+        if (scanf("%lf", &returns[i]) != 1 ||
+            returns[i] < -100.0)
+        {
+            printf("Invalid return value!\n");
+            return 1;
+        }
+
+        sum += returns[i];
+    }
+
+    printf("Enter risk-free rate (%% per period): ");
+    if (scanf("%lf", &riskFreeRate) != 1)
+    {
+        printf("Invalid risk-free rate!\n");
+        return 1;
+    }
+
+    mean = sum / n;
+
+    for (i = 0; i < n; i++)
+    {
+        double difference = returns[i] - mean;
+        variance += difference * difference;
+    }
+
+    /* Population standard deviation */
+    variance /= n;
+    stdDev = sqrt(variance);
+
+    expectedProfit = investment * mean / 100.0;
+    finalValue = investment + expectedProfit;
+
+    if (mean != 0.0)
+        riskPercent = (stdDev / fabs(mean)) * 100.0;
+    else
+        riskPercent = -1.0;
+
+    if (stdDev > 0.0)
+        sharpeRatio = (mean - riskFreeRate) / stdDev;
+    else
+        sharpeRatio = 0.0;
+
+    printf("\n========================================\n");
+    printf("          FINANCIAL RISK REPORT\n");
+    printf("========================================\n");
+
+    printf("Initial Investment     : %.2f\n", investment);
+    printf("Observations           : %d\n", n);
+    printf("Average Return         : %.2f%%\n", mean);
+    printf("Return Std Deviation   : %.2f%%\n", stdDev);
+    printf("Expected Profit/Loss   : %.2f\n", expectedProfit);
+    printf("Estimated Final Value : %.2f\n", finalValue);
+
+    if (riskPercent >= 0)
+        printf("Relative Risk Ratio    : %.2f%%\n", riskPercent);
+    else
+        printf("Relative Risk Ratio    : Undefined (zero mean)\n");
+
+    printf("Sharpe Ratio           : %.3f\n", sharpeRatio);
+
+    printf("\nRisk Classification:\n");
+
+    if (stdDev < 2.0)
+        printf("Low Volatility Risk\n");
+    else if (stdDev < 5.0)
+        printf("Moderate Volatility Risk\n");
+    else
+        printf("High Volatility Risk\n");
+
+    if (mean > 0)
+        printf("Average performance is positive.\n");
+    else if (mean < 0)
+        printf("Average performance is negative.\n");
+    else
+        printf("Average performance is zero.\n");
+
+    printf("========================================\n");
+    printf("Analysis completed.\n");
+
+    return 0;
+}
